@@ -1,14 +1,13 @@
-""" Assignment 2
-Computer Networks
-client.py
-"""
-
 import socket
+import split_encrypt
+
+
+split_encrypt.main("data.csv")
+
 
 #constants
 port = 12345
-tosend = 'check.py'
-torec = 'cli_file_recv.xz'
+# host = socket.gethostname()
 host = ""
 print(host)
 
@@ -17,35 +16,23 @@ s = socket.socket()
 s.connect((host, port))
 
 
-#opening file to send
-f = open(tosend,'rb')
-#Sending file to compress
-print ('\n Sending file to compress...')
-pack = f.read(1024)
-while(pack):
-	print ('Sending file to compress...')
-	s.send(pack)
+for cnt in range(3):
+
+	tosend = '.\toSend\part' + str(cnt+1) + '.csv'
+
+	#opening file to send
+	f = open(tosend,'rb')
+	#Sending file to compress
+	print ('\n Sending file parts...')
 	pack = f.read(1024)
-f.close()
-print ("Done Sending file to compress")
+	while(pack):
+		s.send(pack)
+		pack = f.read(1024)
+	f.close()
+	print ("Done Sending file-part")
 
 
 #Shutting down the sending capabilities of client socket
 s.shutdown(socket.SHUT_WR)
-
-
-#Opening a new file to recieve the compressed file
-f = open(torec,'wb')
-print ("\n Receiving compressed file...")
-#Recieving the compressed file
-pack = s.recv(1024)
-while(pack):
-	print ("Receiving compressed file...")
-	f.write(pack)
-	pack = s.recv(1024)
-f.close()
-print ("Done Receiving compressed file")
-
-
 # Closing the socket
 s.close()

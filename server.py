@@ -1,13 +1,8 @@
-""" Assignment 2
-Computer Networks
-server.py
-"""
-
 import socket
-import lzma
+import decrypt
+
 
 #constants
-tostore = "ser_file_sent.xz"
 host = socket.gethostname()
 print(host)
 port = 12345
@@ -22,48 +17,36 @@ s.bind(("", port))
 s.listen(5)
 print("Server Online")
 
+cnt=1
 
 #Whie true specifies that server remains on irrespective
 while True:
 	#connecting to client
 	c, addr = s.accept()
-	print('\n****************New Client connected : ', addr)
+	print('\n****************Client connected : ', addr)
+
+	torec = './toReceive/part'+str(cnt)+'.csv'
+	cnt+=1
+
+	#opening a new file to store data
+	f = open(torec, mode="wb")
 
 
-	#opening a new file to store compressed data
-	f = lzma.LZMAFile(tostore, mode="wb")
-
-
-	#recieving file to compress
-	print("\nReceiving file to compress...")
-	#recieve uncompressed packets
+	#recieving file
+	print("\nReceiving file ...")
+	#recieve packets
 	pack = c.recv(1024)
 	while (pack):
-		print ("Receiving file to compress...")
-		#lzma compress and writes the data onto our file during write() command
 		f.write(pack)
 		pack = c.recv(1024)
 	f.close()
-	print ("Done Receiving file to compress")
-
-
-	#opening the complete compressed file to return to client
-	f = open(tostore,'rb')
-	print ('\nSending compressed file...')
-	#reading packets from file
-	pack = f.read(1024)
-	while (pack):
-		print ('Sending compressed file...')
-		#sending the compressed data
-		c.send(pack)
-		pack = f.read(1024)
-	f.close()
-	print ("Done Sending compressed file.")
-
-
+	print ("Done Receiving")
+	print(cnt)
 	#closing the connection to client
 	c.close()
+	break
 
+decrypt.main()
 
 #closing the socket
-s.close()     
+s.close()

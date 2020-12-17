@@ -19,7 +19,7 @@ def decrypt_AES(array):
             cipher = AES.new(key, AES.MODE_CBC, iv)  # Setup cipher
             original_data = unpad(cipher.decrypt(array[i][j]), 16)
             new[i][j] = int(original_data)
-    return np.array(new)
+    return (new)
 
 def read_and_decrypt(filename):
     data = pd.read_csv(filename,header=None)
@@ -30,8 +30,25 @@ def read_and_decrypt(filename):
         for j in range(0, len(data[0])):
             new[i].append(int(data[i][j]).to_bytes(16,'big'))
     decrypted = decrypt_AES(new)
-    print(decrypted)
+    return decrypted
 
-read_and_decrypt('part1.csv')
-read_and_decrypt('part2.csv')
-read_and_decrypt('part3.csv')
+def main():
+    array = []
+    array += read_and_decrypt('.\toReceive\part1.csv')
+    # array += read_and_decrypt('.\toReceive\part2.csv')
+    # array += read_and_decrypt('.\toReceive\part3.csv')
+    df = pd.DataFrame(array)
+
+
+
+    f = open('column_names.txt','r')
+
+    col = []
+    while True:
+        x = f.readline()
+        if len(x)==0:
+            break
+        col.append(x[:-1])
+
+    df.columns = col
+    df.to_csv('file.csv',index=False)
