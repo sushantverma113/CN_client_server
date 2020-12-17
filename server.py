@@ -44,7 +44,8 @@ while True:
 	print(cnt)
 	#closing the connection to client
 	c.close()
-	break
+	if cnt==4:
+		break
 
 decrypt.main()
 

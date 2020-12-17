@@ -12,12 +12,12 @@ host = ""
 print(host)
 
 #Creating a socket and connecting to server
-s = socket.socket()
-s.connect((host, port))
+
 
 
 for cnt in range(3):
-
+	s = socket.socket()
+	s.connect((host, port))
 	tosend = '.\toSend\part' + str(cnt+1) + '.csv'
 
 	#opening file to send
@@ -30,9 +30,9 @@ for cnt in range(3):
 		pack = f.read(1024)
 	f.close()
 	print ("Done Sending file-part")
+	# Shutting down the sending capabilities of client socket
+	s.shutdown(socket.SHUT_WR)
+	# Closing the socket
+	s.close()
 
 
-#Shutting down the sending capabilities of client socket
-s.shutdown(socket.SHUT_WR)
-# Closing the socket
-s.close()

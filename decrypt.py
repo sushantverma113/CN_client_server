@@ -35,8 +35,8 @@ def read_and_decrypt(filename):
 def main():
     array = []
     array += read_and_decrypt('.\toReceive\part1.csv')
-    # array += read_and_decrypt('.\toReceive\part2.csv')
-    # array += read_and_decrypt('.\toReceive\part3.csv')
+    array += read_and_decrypt('.\toReceive\part2.csv')
+    array += read_and_decrypt('.\toReceive\part3.csv')
     df = pd.DataFrame(array)
 
 
